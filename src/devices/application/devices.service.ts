@@ -27,10 +27,12 @@ export async function saveReading(payload: { deviceId: number; value: number; ts
     const deviceType = (payload.deviceType ?? '').toUpperCase();
     const zone = payload.zone;
     let isHumidity = false;
+    const isGas = deviceType.includes('GAS');
     if (deviceType) {
       isHumidity = deviceType.includes('HUM');
     }
-    if (zone) {
+    // No generar alertas para dispositivos GAS
+    if (zone && !isGas) {
       if (isHumidity) {
         const min = zone.minHumidity;
         const max = zone.maxHumidity;
